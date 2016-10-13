@@ -1,0 +1,46 @@
+#! /bin/sh
+
+DIE=0
+
+autoconf --version < /dev/null > /dev/null 2>&1
+if test $? -ne 0; then
+	echo
+	echo "You must have autoconf installed."
+	DIE=1
+fi
+
+automake --version < /dev/null > /dev/null 2>&1
+if test $? -ne 0; then
+	echo
+	echo "You must have automake installed."
+	DIE=1
+fi
+
+if test "$DIE" -eq 1; then
+	exit -1
+fi
+
+echo "Removing old files..."
+rm -f configure Makefile Makefile.in src/Makefile src/Makefile.in config.h config.status aclocal.m4 config.cache config.log
+
+mkdir config 2>/dev/null >/dev/null
+
+echo "aclocal -I ."
+aclocal -I .
+if test $? -ne 0; then
+	exit -1
+fi
+echo "autoheader"
+autoheader
+if test $? -ne 0; then
+	exit -1
+fi
+echo "automake --foreign --add-missing"
+automake --foreign --add-missing
+if test $? -ne 0; then
+	exit -1
+fi
+echo "autoconf"
+autoconf
+echo "BOOTSTRAP COMPLETE"
+

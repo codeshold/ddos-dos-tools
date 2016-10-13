@@ -1,0 +1,174 @@
+AC_INIT(src/thc-ssl-dos.c)
+VER=`cat ${srcdir}/VERSION`
+AC_MSG_RESULT(Begining autoconfiguration process for thc-ssl-dos-$VER...)
+
+AC_CONFIG_AUX_DIR(config)
+AC_CANONICAL_SYSTEM
+
+AM_INIT_AUTOMAKE(thc-ssl-dos, $VER)
+AM_CONFIG_HEADER(config.h)
+
+AC_PROG_CC
+dnl AC_PROG_LIBTOOL
+dnl AC_DISABLE_SHARED
+AC_PROG_INSTALL
+AC_PROG_RANLIB
+AC_C_CONST
+
+if test $ac_cv_prog_gcc = yes; then
+	CCOPTS='-O2 -Wall'
+	CFLAGS="$CCOPTS"
+fi
+
+test "x${prefix}" != "xNONE" || prefix="/usr/local"
+test "x${exec_prefix}" != "xNONE" || exec_prefix="${prefix}"
+trydir_i="${prefix}/include"
+trydir_l="${prefix}/lib"
+
+if test "x${prefix}" != "x/usr/local"; then
+	trydir_i="${trydir_i} /usr/local/include"
+	trydir_l="${trydir_l} /usr/local/lib"
+fi
+
+my_top_srcdir=`cd $srcdir; pwd`
+my_toptop_srcdir=`cd $my_top_srcdir/..; pwd`
+dnl INCLUDES="-I${my_top_srcdir}/inc $INCLUDES"
+trydir_i="${trydir_i}"
+AC_ARG_WITH(includes,
+[  --with-includes=DIR    Space-seperated list of include dirs],
+[
+	trydir_i="$trydir_i ${withval}"
+])
+for xincdir in $trydir_i; do
+	if test ! -d "$xincdir"; then
+		continue;
+	fi
+	INCLUDES="$INCLUDES -I${xincdir}"
+done
+CPPFLAGS="${INCLUDES} $CPPFLAGS"
+
+LIBDIR="-L./ $LIBDIR"
+trydir_l="${trydir_l}"
+AC_ARG_WITH(libs,
+[  --with-libs=DIR        Space-seperated list of li brary directories],
+[
+	trydir_l="$trydir_l ${withval}"
+])
+for xlibdir in $trydir_l; do
+	if test ! -d "$xlibdir"; then
+		continue;
+	fi
+	LIBDIR="$LIBDIR -L${xlibdir}";
+done
+LDFLAGS="${LIBDIR} $LDFLAGS"
+
+
+BUILD_STATIC=0
+AC_MSG_CHECKING(whether to compile a static binary)
+AC_ARG_ENABLE(static,
+[  --enable-static        Build a static binary],
+[ case "$enableval" in
+  *)
+    AC_MSG_RESULT(yes)
+    BUILD_STATIC=1
+    ;;
+  esac ],
+  AC_MSG_RESULT(no)
+)
+
+if test x"${BUILD_STATIC}" = "x1"; then
+	CFLAGS="${CFLAGS} -static"
+	LIBS="${LIBS} -ldl"
+fi
+
+
+WITH_DEBUG=0
+AC_MSG_CHECKING(whether to compile with DEBUG flag)
+AC_ARG_ENABLE(debug,
+[  --enable-debug         Enable debug compilation],
+[ case "$enableval" in
+  *)
+    AC_MSG_RESULT(yes)
+    WITH_DEBUG=1
+    ;;
+   esac ],
+   AC_MSG_RESULT(no)
+)
+
+
+AC_CHECK_FILE([/dev/urandom], AC_DEFINE([HAVE_DEVURANDOM], [1], [Define that you found /dev/urandom]))
+
+
+AC_CHECK_LIB(socket, socket)
+AC_CHECK_LIB(nsl, gethostbyname)
+
+AC_CHECK_LIB(crypto, DH_free,, AC_MSG_ERROR(libcrypto not found [part of openssl].))
+AC_CHECK_LIB(ssl, BIO_new_ssl,, AC_MSG_ERROR(openssl library not found.))
+
+AC_MSG_CHECKING(OpenSSL library version)
+AC_TRY_RUN([
+#include <stdio.h>
+#include <openssl/opensslv.h>
+
+#if (OPENSSL_VERSION_NUMBER < 0x009080cf)
+# error "new version required\n"
+#endif
+int main() { return 0; }
+],
+[AC_MSG_RESULT(ok)
+OPENSSL_TO_OLD=0],
+[AC_MSG_RESULT(to old)
+OPENSSL_TO_OLD=1])
+dnl [AC_MSG_ERROR(openssl headers not found)])
+
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS(sys/time.h unistd.h string.h)
+
+AC_C_CONST
+AC_HEADER_TIME
+
+AC_FUNC_MEMCMP
+
+AC_TYPE_SIZE_T
+AC_CHECK_TYPES(u_int32_t)
+AC_CHECK_TYPES(uint32_t)
+
+AC_CHECK_FUNCS(gettimeofday memcpy strchr snprintf vsnprintf)
+
+if test x"${WITH_DEBUG}" = "x1"; then
+	AC_DEFINE(OPSH_WITH_DEBUG, 1, [def])
+	CFLAGS="${CFLAGS} -ggdb"
+fi
+
+
+
+AC_DEFINE(IS_UNIX, 1, [def])
+dnl AC_SUBST(RSAREFLIB)
+AC_OUTPUT(Makefile src/Makefile)
+
+echo "THC-SSL-DOWN has been configured with the following options:"
+echo ""
+echo "              Host: ${host}"
+echo "          Compiler: ${CC}"
+echo "    Compiler Flags: ${CFLAGS}"
+echo "Preprocessor flags: ${CPPFLAGS}"
+echo "      Linker flags: ${LDFLAGS}"
+echo "         Libraries: ${LIBS}"
+if test x"${OPENSSL_TO_OLD}" != "x0"; then
+echo "WARNING: OPENSSL LIBRARIES ARE TO OLD! UPDATE THEM!\n"
+sleep 1
+echo "WARNING: OPENSSL LIBRARIES ARE TO OLD! UPDATE THEM!\n"
+sleep 1
+echo "WARNING: OPENSSL LIBRARIES ARE TO OLD! UPDATE THEM!\n"
+sleep 1
+fi
+
+echo ""
+if test x"${WITH_DEBUG}" = "x1"; then
+	echo "       Debug build: Yes"
+else
+	echo "       Debug build: No"
+fi
+echo "Configuration complete. Now type: make all install"
+
