@@ -9,5 +9,6 @@ thc-ssl-dosit()
 }
 
 for x in `seq 1 100`;
-do thc-ssl-dosit &
+do
+    thc-ssl-dosit &
 done
