@@ -1,9 +1,9 @@
 #!/bin/bash
+# author: wuzhimang@gmail.com
 
-target=127.0.0.1
+target=127.0.0.1 # IP
 port=443
 parallel=100
-
 
 thc-ssl-dosit()
 {
