@@ -13,7 +13,7 @@
 
 ### 2. SSL 攻击
 - [thc-ssl-dos](https://github.com/wenfengshi/ddos-dos-tools/tree/master/thc-ssl-dos)是一款有名的ssl攻击程序，原理是ssl重新协商机制，但对于关闭了的或不支持SSL重协商的服务端，该工具将失效。
-- [ssl-dos.sh](https://github.com/wenfengshi/ddos-dos-tools/blob/master/ssl-dos.sh)是自己写的一个简单的ssl攻击工具，且适用于不支持ssl重协商的服务端，该脚本借助的是openssl工具。
+- [ssl-dos.sh](https://github.com/wenfengshi/ddos-dos-tools/blob/master/ssl-dos.sh)是自己写的一个简单的ssl攻击脚本，且适用于不支持ssl重协商的服务端，该脚本借助的是openssl工具。
 
 
 
