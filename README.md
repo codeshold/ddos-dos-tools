@@ -24,9 +24,7 @@
 - 进入目录下`make`编译后，`http-get-dos -h` 查看使用信息
 
 ### 5. HTTP 慢速攻击
-- [pyloris](https://github.com/wenfengshi/ddos-dos-tools/blob/master/pyloris)是一款开源的HTTP慢速DOS攻击软件，本版本为3.2版本，详情见[主页](https://motoma.io/pyloris/)
-含图形界面，使用很方便
-![image_1avqoe17vaoap1gvn5fvm1oks9.png-47.3kB](http://static.zybuluo.com/wuzhimang/2lv2eulbiabdko1ov5qot8wn/image_1avqoe17vaoap1gvn5fvm1oks9.png)
+- [pyloris](https://github.com/wenfengshi/ddos-dos-tools/blob/master/pyloris)是一款开源的HTTP慢速DOS攻击软件，本版本为3.2版本，详情见[主页](https://motoma.io/pyloris/)，含图形界面，使用很方便
 
 ### 6. UDP fragment DoS attack
 > 同SynFlood类似
