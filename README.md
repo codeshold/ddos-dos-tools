@@ -1,6 +1,6 @@
 ## DDos/DoS工具集
 
-本仓库包含了多类DDoS/DoS工具，且相应工具自己已使用到实际的DDoS/DoS攻击测试中...
+本仓库包含了多类DDoS/DoS工具，自己已使用到实际的攻击测试中...
 
 ### 1. SynFlood 攻击
 > 借助`netsniff-ng`套件中的`trafgen`工具，其可伪造源ip发起DDoS攻击
@@ -26,7 +26,7 @@
 ### 5. HTTP 慢速攻击
 - [pyloris](https://github.com/wenfengshi/ddos-dos-tools/blob/master/pyloris)是一款开源的HTTP慢速DOS攻击软件，本版本为3.2版本，详情见[主页](https://motoma.io/pyloris/)，含图形界面，使用很方便
 
-### 6. UDP fragment DoS attack
+### 6. UDP fragment 攻击
 > 同SynFlood类似
 
 - [small_frag.trafgen](https://github.com/wenfengshi/ddos-dos-tools/blob/master/small_frag.trafgen)是对应的配置文件模版，修改文件里的源／目的MAC地址以及源／目的IP后，命令行直接运行`trafgen –cpp –dev eth0 –conf small_frag.trafgen –cpu 2 –verbose`即可发起UDP fragment DoS attack攻击
