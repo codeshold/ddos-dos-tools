@@ -1,11 +1,6 @@
-/* Trafgen example file: TCP SYN attack
- *  Used when developing the iptables solution for SYNPROXY
- *   http://rhelblog.redhat.com/2014/04/11/mitigate-tcp-syn-flood-attacks-with-red-hat-enterprise-linux-7-beta/
- *
- * This file need to be run with --cpp for c-preprocessor call.
+/* TCP SYN attack ( 64byte )
  * Command example:
- *  trafgen --cpp --dev dummy0 --conf syn_attack01.trafgen --cpu 2 --verbose
- *
+ *  trafgen --cpp --dev em2 --conf synflood.trafgen --verbose
  * Note: dynamic elements "drnd()" make trafgen slower
  */
 
@@ -19,16 +14,16 @@
   /* --- Ethernet Header --- */
   /* NEED ADJUST */
   0x00, 0x12, 0xc0, 0x02, 0xac, 0x56,  # MAC Destination
-  0x00, 0x12, 0xc0, 0x02, 0xac, 0x5a,  # MAC Source
+  0x00, 0x12, 0xc0, drnd(3),  # MAC Source
+  
   const16(ETH_P_IP),
-
   /* IPv4 Version, IHL, TOS */
   0b01000101, 0,
   /* IPv4 Total Len */
-  const16(40),
+  const16(46),
   /* IPv4 Ident */
-  //drnd(2),
-  const16(2),
+  drnd(2),
+  //const16(2),
 
   /* IPv4 Flags, Frag Off */
   0b01000000, 0,
@@ -41,7 +36,7 @@
 
   /* NEED ADJUST */
   10, 10, 88, drnd(1), # Source IP
-  10, 10, 88, 172,       # Dest IP
+  10, 10, 88, 172, # Dest IP
 
   /* TCP Source Port */
   drnd(2),
@@ -50,7 +45,7 @@
   /* TCP Sequence Number */
   drnd(4),
   /* TCP Ackn. Number */
-  c32(0), /* NOTICE ACK==zero with SYN packets */
+  const32(0), /* NOTICE ACK==zero with SYN packets */
 
   /* TCP Header length + Flags */
   //const16((0x5 << 12) | SYN | ECN)	/* TCP SYN+ECN Flag */
@@ -63,5 +58,8 @@
   /* TCP Checksum (offset IP, offset TCP) */
   csumtcp(14, 34),
   const16(0), /*PAD*/
+  
+  /* Data */
+  "SYNswf"
 }
 

