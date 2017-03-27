@@ -30,3 +30,9 @@
 > 同SynFlood类似
 
 - [small_frag.trafgen](https://github.com/wenfengshi/ddos-dos-tools/blob/master/small_frag.trafgen)是对应的配置文件模版，修改文件里的源／目的MAC地址以及源／目的IP后，命令行直接运行`trafgen --cpp --dev eth0 --conf small_frag.trafgen --cpu 2 --verbose`即可发起UDP fragment DoS attack攻击
+
+### 7. DoS放大攻击
+- [NTP DoS](https://github.com/wenfengshi/ddos-dos-tools/blob/master/ntp-dos.py) 基于NTP协议的DoS放大攻击
+- [DNS DoS](https://github.com/wenfengshi/ddos-dos-tools/blob/master/dns-dos.py) 基于DNS协议的DoS放大攻击
+- [SNMP DoS](https://github.com/wenfengshi/ddos-dos-tools/blob/master/snmp-dos.py) 基于SNMP协议的DoS放大攻击
+- [SSDP DoS](https://github.com/wenfengshi/ddos-dos-tools/blob/master/ssdp-dos.py) 基于SSDP协议的DoS放大攻击
