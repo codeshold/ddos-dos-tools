@@ -3,6 +3,7 @@
 
 
 > 技术交流QQ群: 关注微信公众号【rich和rich的朋友】--> 获取【技术QQ群】
+> 
 > <img src="https://img.picgo.net/2024/10/29/qrcodef1b42b40bdf32b8b.jpg" height=120> </img>
 
 
