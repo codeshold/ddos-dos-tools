@@ -3,7 +3,8 @@
 
 
 > 技术交流QQ群: 关注微信公众号【rich和rich的朋友】--> 获取【技术QQ群】
-> <img src="[qrcode.jpg](https://www.picgo.net/image/qrcode.ovVTVk)" height=120> </img>
+
+<img src="https://www.picgo.net/image/qrcode.ovVTVk" height=120> </img>
 
 
 ### 1. SynFlood 攻击
