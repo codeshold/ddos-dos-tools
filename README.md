@@ -2,7 +2,9 @@
 本仓库包含了多类DDoS/DoS工具，自己已使用到实际的攻击测试中...
 
 
-> 技术交流QQ群: **635806352**（加群请备注仓库链接）
+> 技术交流QQ群: 关注微信公众号【rich和rich的朋友】--> 获取【技术QQ群】
+> <img src="./qrcode.jpg" height=120></img>
+
 
 ### 1. SynFlood 攻击
 > 借助`netsniff-ng`套件中的`trafgen`工具，其可伪造源ip发起DDoS攻击
