@@ -3,6 +3,7 @@
 
 
 > 技术交流QQ群: 关注微信公众号【rich和rich的朋友】--> 获取【技术QQ群】
+> ![img](./qrcode.jpg)
 > <img src="qrcode.jpg" height=120> </img>
 
 
